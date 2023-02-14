@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel ="stylesheet" href='/stylesheets/style.css'>
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Create an account</title>
+  <title>Log In</title>
 </head>
 <body>
 <div 
@@ -15,7 +15,7 @@
     id="Shell"
     class = "w-11/12 mx-auto sm:w-6/12 md:w-5/12 mt-[50px]"
   >
-  <h1 class = "text-3xl text-center">Sign Up</h1>
+  <h1 class = "text-3xl text-center">Log In</h1>
   <form 
     action="" 
     method="POST"
@@ -32,15 +32,15 @@
         type = 'submit'
         class = "border-black rounded-md border-[1px] w-fit mx-auto p-1 my-10
         active:translate-x-[3px] active:translate-y-[3px] hover:bg-gray-300"
-        >Sign Up</button>
-    <hr class = "my-[25px] h-[2px] border-[2px]">
-    <h2 class = "my-10 text-center text-lg">Already have an account with us?</h2>
-    <button 
-        type = 'button'
-        onclick = "location.href='/log-in'"
-        class = "border-black rounded-md border-[1px] w-fit mx-auto p-1 my-10
-        active:translate-x-[3px] active:translate-y-[3px] hover:bg-gray-300"
         >Log In</button>
+        <hr class = "my-[25px] h-[2px] border-[2px]">
+        <h2 class = "my-10 text-center text-lg">Don't have an account with us?</h2>
+        <button 
+            type = 'button'
+            onclick = "location.href='/sign-up'"
+            class = "border-black rounded-md border-[1px] w-fit mx-auto p-1 my-10
+            active:translate-x-[3px] active:translate-y-[3px] hover:bg-gray-300"
+            >Sign Up</button>
   </form>
   </div>
 </div>

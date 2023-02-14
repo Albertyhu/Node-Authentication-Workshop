@@ -1,13 +1,19 @@
 const express = require('express'); 
 const router = express.Router(); 
-const SignUpController = require('../controller/signUpController')
+const AuthenticationController = require('../controller/authenticationController')
 
 router.get('/', (req, res, next) => {
-    res.render('index')
+    res.render('index', {user: req.user})
 })
 
-router.get('/sign-up', SignUpController.SignUp_Get)
+router.post('/', AuthenticationController.LogIn_Post)
 
-router.post('/sign-up', SignUpController.SignUp_Post)
+router.get('/sign-up', AuthenticationController.SignUp_Get)
 
+router.post('/sign-up', AuthenticationController.SignUp_Post)
+
+router.get('/log-in', AuthenticationController.LogIn_Get)
+router.post('/log-in', AuthenticationController.LogIn_Post)
+
+router.get('/log-out', AuthenticationController.LogOut)
 module.exports = router; 

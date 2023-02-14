@@ -7,6 +7,10 @@
         <title>Authentication Workshop</title>
     </head>
     <body>
-        <h1 class = "text-center text-6xl uppercase text-red">hello world!</h1>
+        <% if(user) { %>
+            <h1 class = "text-center text-6xl uppercase text-red">Welcome!</h1>
+        <% } else { %> 
+              <%- include('partials/login-form') %>
+        <%}%>
     </body>
 </html>

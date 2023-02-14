@@ -2,7 +2,7 @@
   "name": "authenticationworkshop",
   "version": "1.0.0",
   "description": "Authentication workshop",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "test",
     "devstart": "npm run build/css && nodemon ./bin/www",
@@ -19,6 +19,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.3",
+    "http-errors": "^2.0.0",
     "luxon": "^3.2.1",
     "mongodb": "^5.0.1",
     "mongoose": "^6.9.1",
