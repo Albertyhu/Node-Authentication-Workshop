@@ -16,18 +16,38 @@
     class = "w-11/12 mx-auto sm:w-6/12 md:w-5/12 mt-[50px]"
   >
   <h1 class = "text-3xl text-center">Sign Up</h1>
+  <% if(typeof error != 'undefined' && error.length != 0 ) { %> 
+    <div>
+        <h2>Error in registering</h2>
+        <div><%= error %></div>
+    </div>
+  <%} %>
   <form 
-    action="" 
+    action="/sign-up" 
     method="POST"
     class = "grid [&>input]:border-black [&>input]:rounded-md [&>input]:border-[1px] 
     [&>input]:p-1 [&>input]:mb-[20px]">
     <label for="username">Username</label>
-    <input name="username" placeholder="username" type="text" />
+    <input
+        name="username" 
+        placeholder="username" 
+        type="text" 
+        value ="<%= typeof username != 'undefined' ? username : null %>"
+        />
+    <label for="email">Email</label>
+    <input 
+        name="email" 
+        type="text" 
+        placeholder="Type your email here."
+        value ="<%= typeof email != 'undefined' ? email : null %>"
+        />
     <label for="password">Password</label>
     <input 
         name="password" 
         type="password" 
-        placeholder="password"/>
+        placeholder="password"
+        value ="<%= typeof password != 'undefined' ? password : null %>"
+        />
     <button 
         type = 'submit'
         class = "border-black rounded-md border-[1px] w-fit mx-auto p-1 my-10

@@ -7,8 +7,9 @@
         <title>Authentication Workshop</title>
     </head>
     <body>
-        <% if(user) { %>
-            <h1 class = "text-center text-6xl uppercase text-red">Welcome!</h1>
+        <% if(typeof user != 'undefined') { %>
+            <h1 class = "text-center text-6xl uppercase text-red">Welcome, <%= typeof user.username != 'undefined' ? user.username : null %>!</h1>
+            <%- include('partials/logoutButton') %>
         <% } else { %> 
               <%- include('partials/login-form') %>
         <%}%>

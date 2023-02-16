@@ -5,62 +5,103 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const createError  = require('http-errors')
+const bcrypt = require('bcrypt')
+const User = require('./model/user')
+const flash = require('express-flash')
+const initializePassport = require('./passport-config.js');
+const {body, validationResult } = require('express-validator')
 
-const Schema = mongoose.Schema;
-
-require("dotenv").config();
-
+if(process.env.NODE_ENV !== 'production'){
+    require("dotenv").config();
+}
+initializePassport(passport)
 const mongoDb = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@locallibrarycluster.lyfvtsg.mongodb.net/AuthenticationWorkshop?retryWrites=true&w=majority`;
 
 mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
 
-
-const indexRouter = require('./routes/indexRoute')
+//const indexRouter = require('./routes/indexRoute')
 
 const app = express();
 app.set("views", __dirname + '/views');
 app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, "public")));
 
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(flash())
+
+//secret is the encryption key used to encrypt the passwords 
+//resave: Do we want to resave if nothing is changed?
+//saveUninitialized: do we want to save an empty value.  
+app.use(session({
+    secret: `${process.env.ENCRYPT_KEY}`,
+    resave: false,
+    saveUninitialized: false, 
+}));
+
 app.use(passport.initialize());
+
 app.use(passport.session());
+
 app.use(express.urlencoded({ extended: false }));
 
-passport.use(
-    new LocalStrategy((username, password, done) => {
-        User.findOne({ username: username }, (err, user) => {
-            if (err) {
-                return done(err)
+//app.use("/", indexRouter);
+
+
+app.get('/', (req, res, next)=>{
+    res.render('index', {
+        user: req.user,
+    })
+})
+
+app.get('/log-in', async (req, res, next)=>{
+    res.render('login-form')
+})
+
+app.post('/log-in', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/log-in',
+    failureFlash: true, 
+}))
+
+app.get('/sign-up', (req, res, next)=>{
+    res.render('sign-up-form')
+})
+
+app.post('/sign-up', async (req, res, next)=>{
+    try{
+        const hashedPassword = await bcrypt.hash(req.body.password, 10); 
+        var obj = {
+            username: req.body.username,
+            email: req.body.email, 
+            password: hashedPassword, 
+        }
+        const newUser = new User(obj)
+        .save((err, result)=>{
+            if(err){
+                return next(err)
             }
-            if (!user) {
-                return done(null, false, { message: "Incorrect username" });
-            }
-            if (user.password !== password) {
-                return done(null, false, { message: "Incorrect password" });
-            }
-            return done(null, user); 
+         res.redirect('/', )
         })
-    })
-)
-
-//this saves the user.id in the session while the user is still
-//active on the app unless he/she logs out. 
-passport.serializeUser(function (user, done) {
-    done(null, user.id); 
+    }catch(e){
+        console.log("Error in logging in: ", e.message)
+        res.render('sign-up-form', {
+            error: e,
+            username: req.body.username,
+            email: req.body.email, 
+            password: hashedPassword, 
+            })
+    }
 })
 
-//When the user returns to the site, this function retrives the necessary
-//information, so that the session is the same as before
-passport.deserializeUser(function (id, done) {
-    User.findById(id, function (err, user) {
-        done(err, user); 
-    })
+app.get('/log-out', (req, res, next)=>{
+    req.logout(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/");
+    });
 })
-
-app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

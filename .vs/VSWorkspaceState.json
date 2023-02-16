@@ -4,10 +4,9 @@
     "\\controller",
     "\\model",
     "\\public",
-    "\\public\\stylesheets",
     "\\routes",
-    "\\views"
+    "\\views",
+    "\\views\\partials"
   ],
-  "SelectedNode": "\\views\\sign-up-form.ejs",
   "PreviewInSolutionExplorer": false
 }
