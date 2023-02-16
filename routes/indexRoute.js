@@ -4,8 +4,6 @@ const AuthenticationController = require('../controller/authenticationController
 
 router.get('/', AuthenticationController.RenderHome)
 
-router.post('/', AuthenticationController.LogIn_Post)
-
 router.get('/sign-up', AuthenticationController.SignUp_Get)
 
 router.post('/sign-up', AuthenticationController.SignUp_Post)

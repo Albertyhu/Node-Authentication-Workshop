@@ -11,12 +11,27 @@ exports.RenderHome = (req, res, next) => {
     })
 }
 
+exports.LogIn_Get = async (req, res, next) => {
+    res.render('login-form')
+}
+
+exports.LogIn_Post =passport.authenticate("local", {
+        successRedirect: '/',
+        failureRedirect: '/log-in',
+        failureFlash: true,
+})
+
 exports.SignUp_Get = (req, res, next) => {
     res.render('sign-up-form');
 }
 
 exports.SignUp_Post = async (req, res, next) => {
     try {
+        //bcrypt has the purpose of securing the password by hashing and salting it
+        //by encrypting it. It will 'salt' or in other words
+        //add more random letters at the end of hashed password
+        //The second argument in the bcrypt.hash function determines
+        //how many letters you want to add to the end.
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         var obj = {
             username: req.body.username,
@@ -39,18 +54,6 @@ exports.SignUp_Post = async (req, res, next) => {
             password: hashedPassword,
         })
     }
-}
-
-exports.LogIn_Get = async (req, res, next) => {
-    res.render('login-form')
-}
-
-exports.LogIn_Post = () => {
-    passport.authenticate("local", {
-        successRedirect: '/',
-        failureRedirect: '/log-in',
-        failureFlash: true, 
-    })
 }
 
 exports.LogOut = (req, res, next) => {

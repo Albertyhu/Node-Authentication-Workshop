@@ -48,69 +48,69 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 //Exporting the routes didn't work for the authentication system
-const indexRouter = require('./routes/indexRoute')
-app.use("/", indexRouter);
+//const indexRouter = require('./routes/indexRoute')
+//app.use("/", indexRouter);
 
 
-//app.get('/', (req, res, next)=>{
-//    res.render('index', {
-//        user: req.user,
-//    })
-//})
+app.get('/', (req, res, next)=>{
+    res.render('index', {
+        user: req.user,
+    })
+})
 
-//app.get('/log-in', async (req, res, next)=>{
-//    res.render('login-form')
-//})
+app.get('/log-in', async (req, res, next)=>{
+    res.render('login-form')
+})
 
-//app.post('/log-in', passport.authenticate('local', {
-//    successRedirect: '/',
-//    failureRedirect: '/log-in',
-//    failureFlash: true, 
-//}))
+app.post('/log-in', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/log-in',
+    failureFlash: true, 
+}))
 
-//app.get('/sign-up', (req, res, next)=>{
-//    res.render('sign-up-form')
-//})
+app.get('/sign-up', (req, res, next)=>{
+    res.render('sign-up-form')
+})
 
-//app.post('/sign-up', async (req, res, next)=>{
-//    try {
-//        //bcrypt has the purpose of securing the password by hashing and salting it
-//        //by encrypting it. It will 'salt' or in other words
-//        //add more random letters at the end of hashed password
-//        //The second argument in the bcrypt.hash function determines
-//        //how many letters you want to add to the end.
-//        const hashedPassword = await bcrypt.hash(req.body.password, 10); 
-//        var obj = {
-//            username: req.body.username,
-//            email: req.body.email, 
-//            password: hashedPassword, 
-//        }
-//        const newUser = new User(obj)
-//        .save( err =>{
-//            if(err){
-//                return next(err)
-//            }
-//         res.redirect('/', )
-//        })
-//    }catch(e){
-//        console.log("Error in logging in: ", e.message)
-//        res.render('sign-up-form', {
-//            error: e,
-//            username: req.body.username,
-//            email: req.body.email, 
-//            password: hashedPassword, 
-//            })
-//    }
-//})
+app.post('/sign-up', async (req, res, next)=>{
+    try {
+        //bcrypt has the purpose of securing the password by hashing and salting it
+        //by encrypting it. It will 'salt' or in other words
+        //add more random letters at the end of hashed password
+        //The second argument in the bcrypt.hash function determines
+        //how many letters you want to add to the end.
+        const hashedPassword = await bcrypt.hash(req.body.password, 10); 
+        var obj = {
+            username: req.body.username,
+            email: req.body.email, 
+            password: hashedPassword, 
+        }
+        const newUser = new User(obj)
+        .save( err =>{
+            if(err){
+                return next(err)
+            }
+         res.redirect('/', )
+        })
+    }catch(e){
+        console.log("Error in logging in: ", e.message)
+        res.render('sign-up-form', {
+            error: e,
+            username: req.body.username,
+            email: req.body.email, 
+            password: hashedPassword, 
+            })
+    }
+})
 
-//app.get('/log-out', (req, res, next)=>{
-//    req.logout(function (err) {
-//        if (err) {
-//          return next(err);
-//        }
-//        res.redirect("/");
-//    });
-//})
+app.get('/log-out', (req, res, next)=>{
+    req.logout(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/");
+    });
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
